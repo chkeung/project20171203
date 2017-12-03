@@ -74,7 +74,7 @@ app.get('/api/restaurant/read', function (req, res) {
 
 app.get('/api/restaurant/read/name/:name', function (req, res) {
 	var criteria = {}
-	//criteria["name"] = req.params.name;
+	criteria["name"] = req.params.name;
 	//console.log(criteria)
 	//var result = [];
 	findAll(res,criteria,0, function(result){
