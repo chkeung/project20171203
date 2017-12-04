@@ -29,8 +29,10 @@
       <h1><%= details.name %></h1>
       </div>
       <% if(details.photo != "Not offered"){ %>
+        <% if(details.photoMimetype.includes("image")){ %>
       <img src="data: <%= details.photoMimetype %>; base64, <%= details.photo %>" class="w3-image w3-border w3-padding" style="width:100%">
-      <% } %>
+      <% }} %>
+
       <div class="w3-container">
       <p>
       <label class="w3-label w3-validate">Borough: </label><%= details.borough %></p>

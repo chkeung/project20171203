@@ -66,21 +66,33 @@ app.get('/api/restaurant/read', function (req, res) {
 	var criteria = req.params;
 	//var result = [];
 	findAll(res,criteria,0, function(result){
-		//console.log(result);
-		res.status(200).send(result);
-		res.status(200).end();
+		if(result.length == 0){
+			console.log(result);
+		//res.status(200).send(result);
+			res.status(200).end("{}");
+		}else{
+			res.status(200).send(result);
+			res.status(200).end();
+
+		}
 	})
 })
 
 app.get('/api/restaurant/read/name/:name', function (req, res) {
 	var criteria = {}
-	//criteria["name"] = req.params.name;
+	criteria["name"] = req.params.name;
 	//console.log(criteria)
 	//var result = [];
 	findAll(res,criteria,0, function(result){
-		console.log(result);
-		res.status(200).send(result);
-		res.status(200).end();
+		if(result.length == 0){
+			console.log(result);
+		//res.status(200).send(result);
+			res.status(200).end("{}");
+		}else{
+			res.status(200).send(result);
+			res.status(200).end();
+
+		}
 	})
 
 })
@@ -91,9 +103,15 @@ app.get('/api/restaurant/read/borough/:borough', function (req, res) {
 	//console.log(criteria)
 	//var result = [];
 	findAll(res,criteria,0, function(result){
-		console.log(result);
-		res.status(200).send(result);
-		res.status(200).end();
+		if(result.length == 0){
+			console.log(result);
+		//res.status(200).send(result);
+			res.status(200).end("{}");
+		}else{
+			res.status(200).send(result);
+			res.status(200).end();
+
+		}
 	})
 
 })
@@ -104,9 +122,15 @@ app.get('/api/restaurant/read/cuisine/:cuisine', function (req, res) {
 	//console.log(criteria)
 	//var result = [];
 	findAll(res,criteria,0, function(result){
-		//console.log(result);
-		res.status(200).send(result);
-		res.status(200).end();
+		if(result.length == 0){
+			console.log(result);
+		//res.status(200).send(result);
+			res.status(200).end("{}");
+		}else{
+			res.status(200).send(result);
+			res.status(200).end();
+
+		}
 	})
 
 })
@@ -318,7 +342,7 @@ app.get("/remove", function(req,res) {
 });
 
 //post
-app.post('/change',function(req,res,) {
+app.post('/change',function(req,res) {
 	//console.log(req.body.name);
 	var temp = {};
 	findOwner(res, req.body._id, function(owner){
@@ -359,6 +383,8 @@ app.post('/change',function(req,res,) {
 			var sampleFile = req.files.sampleFile;	
 			new_r['photo'] = req.files.sampleFile.data.toString('base64');		
 			new_r['photoMimetype'] = req.files.sampleFile.mimetype;
+			//new_r['photoMimetype'];
+			
 			new_r['address'] = address;
 			new_r['grades'] = temp["grades"];
 			new_r['owner'] = req.body.userid;
@@ -436,63 +462,84 @@ app.post('/api/restaurant/create',function(req,res) {
 	var coord = [];
 	new_r['name'] = req.body.name;
 	abc = req.body.name;
-	new_r['borough'] = (req.body.borough.length > 0) ? req.body.borough : "Not offered";
-	new_r['cuisine'] = (req.body.cuisine.length > 0) ? req.body.cuisine : "Not offered";
-	address['street'] = (req.body.street.length > 0) ? req.body.street : "Not offered";
-	address['building'] = (req.body.building.length > 0) ? req.body.building : "Not offered";
-	address['zipcode'] = (req.body.zipcode.length > 0) ? req.body.zipcode : "Not offered";
-	coord.push((req.body.lon.length > 0) ? req.body.lon : "Not offered");
-	coord.push((req.body.lat.length > 0) ? req.body.lat : "Not offered");
+	new_r['borough'] = (req.body.borough == null) ? "Not offered":req.body.borough;
+	new_r['cuisine'] = (req.body.cuisine == null) ? "Not offered":req.body.cuisine;
+	address['street'] = (req.body.street == null) ? "Not offered":req.body.street;
+	address['building'] = (req.body.building == null) ? "Not offered":req.body.building;
+	address['zipcode'] = (req.body.zipcode == null) ? "Not offered":req.body.zipcode;
+	coord.push((req.body.lon == null) ? "Not offered":req.body.lon);
+	coord.push((req.body.lat == null) ? "Not offered":req.body.lat);
 	address['coord'] = coord;
-	
+
+		//new_r['borough'] = (req.body.borough.length > 0) ? req.body.borough : "Not offered";
+	//	new_r['cuisine'] = (req.body.cuisine.length > 0) ? req.body.cuisine : "Not offered";
 	//console.log("hello: "+req.session.username);
 
-	if (isEmpty(req.files)){
-		console.log('No photo were uploaded.');
-		new_r['photo'] = "Not offered";		
-		new_r['photoMimetype'] = "Not offered";
-		new_r['address'] = address;
-		new_r['grades'] = grades;
-		new_r['owner'] = req.session.username;
+	//if (isEmpty(req.files)){
+	console.log('No photo were uploaded.');
+	new_r['photo'] = "Not offered";		
+	new_r['photoMimetype'] = "Not offered";
+	new_r['address'] = address;
+	new_r['grades'] = grades;
+	//new_r['owner'] = req.session.username;
 
-	}else{
-		console.log("With photo");
+	//}else{
+	//	console.log("With photo");
 		//var filename = req.files.sampleFile.name;
-		var sampleFile = req.files.sampleFile;	
-    	new_r['photo'] = req.files.sampleFile.data.toString('base64');		
-		new_r['photoMimetype'] = req.files.sampleFile.mimetype;
-		new_r['address'] = address;
-		new_r['grades'] = grades;
-	 	new_r['owner'] = req.session.username;
+		//var sampleFile = req.files.sampleFile;	
+    	//new_r['photo'] = req.files.sampleFile.data.toString('base64');		
+	//	new_r['photoMimetype'] = req.files.sampleFile.mimetype;
+	//	new_r['address'] = address;
+	//	new_r['grades'] = grades;
+	new_r['owner'] = req.body.user;
 		/*sampleFile.mv(__dirname + '/public/'+filename, function(err) {
 			if (err)
 			  return console.log(err);
 			});*/
-	}
+
 		//console.log(req.files.sampleFile.data);
 		//console.log(req.files);
 	//console.log(new_r);
 	details = new_r;
-	create2(res, new_r, function(result){
+	if(new_r['owner']=="" || new_r['name']==""){
+		var js = {};
+		js["status"] = "failed"; 
+		//var json = JSON.stringify({"status": "failed"});
+		//var jsonstr = JSON.stringify(json);
+		//res.status(200).send(re);
+		res.writeHead(200, {"Content-Type":"application/json"});
+		res.end(JSON.stringify(js));
+	}else{
+		create2(res, new_r, function(result){
 		var re = {};
-		var status = "failed";
+	//	var status = "failed";
 		//result.result.ok == 0;
-		if(result.result.ok == 1){
-			status = "ok";
-			re["status"] = status;
-			re["_id"] = result.insertedId;
-		}else{
-			re["status"] = status;
-		}
+	//	if(result.result.ok == 1){
+	//		status = "ok";
+	//		re["status"] = status;
+	//		re["_id"] = result.insertedId;
+	//	}else{
+	//		re["status"] = status;
+	//	}
+		var js = {};
+		js["status"] = "ok"; 
+		js["_id"] = result.insertedId; 
+		//var json = JSON.stringify({status: "ok", _id: result.insertedId});
+		res.writeHead(200, {"Content-Type":"application/json"});
 		console.log(result.result.ok);
-		res.status(200).send(re);
-		res.status(200).end();
-	});
+		
+		//var jsonstr = JSON.stringify(json);
+		//res.status(200).send(re);
+		res.end(JSON.stringify(js));
+		//res.redirect('/display');
+		});
+	}
+
 	//res.status(200).send(result);
 	//res.status(200).end();
 	//console.log(address);
 	//console.log(coord);
-	//res.redirect('/new');
+	
 });
 
 app.post('/create',function(req,res) {
@@ -528,9 +575,14 @@ app.post('/create',function(req,res) {
 		var sampleFile = req.files.sampleFile;	
     	new_r['photo'] = req.files.sampleFile.data.toString('base64');		
 		new_r['photoMimetype'] = req.files.sampleFile.mimetype;
+		//if(new_r['photoMimetype'].includes("image")){
+		//			new_r['photoMimetype'] = req.files.sampleFile.mimetype;
+		//}else{
+		//		new_r['photoMimetype'] = "";
+		//}
 		new_r['address'] = address;
 		new_r['grades'] = grades;
-	 	new_r['owner'] = req.session.username;
+	 	new_r['owner'] = req.body.owner;
 		/*sampleFile.mv(__dirname + '/public/'+filename, function(err) {
 			if (err)
 			  return console.log(err);
@@ -703,6 +755,7 @@ function create2(res, new_r, callback) {
 			//console.log(JSON.stringify(new_r));
 			console.log("\ninsert was successful!");
 			console.log('Uploaded!');
+
 			callback(result);		
 		});
 	});
